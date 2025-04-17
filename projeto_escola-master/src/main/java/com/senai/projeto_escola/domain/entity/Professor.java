@@ -18,4 +18,8 @@ public class Professor extends Usuario{
     @Enumerated(EnumType.STRING)
     @Column(name = "unidades_curriculares")
     private List<UnidadesCurriculares> unidadesCurriculares;
+
+    public void setUnidadeCurriculares(List<UnidadesCurriculares> unidadesCurriculares) {
+
+    }
 }

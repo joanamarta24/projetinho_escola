@@ -1,6 +1,7 @@
 package interface_ui.controller;
 
 import com.senai.projeto_escola.application.dto.CoordenadorDto;
+import com.senai.projeto_escola.service.CoordenadorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,7 @@ public class CoordenadorController {
     private CoordenadorService coordenadorService;
 
     @PostMapping
-    public ResponseEntity <String> salvar (@ResponseBody CoordenadorDto coordenadorDto){
+    public ResponseEntity <String> salvar (@RequestBody CoordenadorDto coordenadorDto){
         coordenadorService.salvar(coordenadorDto);
         return ResponseEntity.ok("Coordenador salvo com sucesso");
     }
@@ -24,19 +25,18 @@ public class CoordenadorController {
         return ResponseEntity.ok(coordenadorService.listar());
     }
     @GetMapping("/{id}")
-    public ResponseEntity<String>buscarPorId(@PathVariable Long id){
+    public ResponseEntity<CoordenadorDto> buscarPorId(@PathVariable Long id){
         return coordenadorService.buscarPorId(id)
                 .map(ResponseEntity::ok)
-                .orsElse(ResponseEntity.notFound().build());
+                .orElse(ResponseEntity.notFound().build());
     }
     @PutMapping("/{id}")
-    public ResponseEntity<String >atualizar(@PathVariable Long id,@RequestBody CoordenadorDto coordenadorDto){
-       if (coordenadorDto.atualizar(id,coordenadorDto)){
-           return  ResponseEntity.ok("Coordenador atualizado com sucesso");
-       }else{
+    public ResponseEntity<String>atualizar(@PathVariable Long id,@RequestBody CoordenadorDto coordenadorDto){
+        if (coordenadorService.atualizar(id,coordenadorDto)){
+            return ResponseEntity.ok("Coordenador atualizado com sucesso");
+        }else{
            return ResponseEntity.notFound().build();
-       }
-
+        }
     }
     @GetMapping("/{id}")
     public ResponseEntity<String>deletar(@PathVariable Long id){
